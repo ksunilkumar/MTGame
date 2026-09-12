@@ -11,6 +11,7 @@ let highScore = localStorage.getItem('dinoHighScore') || 0;
 let gameSpeed = 5;
 let isGameOver = false;
 let isPlaying = false;
+let isPaused = false;
 
 // Load images
 const trexImg = new Image();
@@ -259,7 +260,7 @@ function endGame() {
 }
 
 function animate() {
-    if (isGameOver) return;
+    if (isGameOver || isPaused) return;
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
@@ -307,3 +308,23 @@ window.addEventListener('mousedown', (e) => {
         handleInput(e);
     }
 });
+
+// YouTube Playables Requirements
+// 1. Pause on Background (Visibility API)
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        if (isPlaying && !isGameOver) {
+            isPaused = true;
+        }
+    } else {
+        if (isPaused) {
+            isPaused = false;
+            requestAnimationFrame(animate);
+        }
+    }
+});
+
+// 2. Prevent Native Browser Behavior (Scrolling/Zooming)
+window.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+}, { passive: false });
