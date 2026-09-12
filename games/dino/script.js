@@ -29,8 +29,12 @@ function resizeCanvas() {
     groundY = Math.floor(canvas.height * 0.75);
     
     // Adjust dino and obstacles if they fall below the new ground
-    if (dino.y + dino.height > groundY) {
-        dino.y = groundY - dino.height;
+    try {
+        if (dino && dino.y + dino.height > groundY) {
+            dino.y = groundY - dino.height;
+        }
+    } catch(e) {
+        // Dino not yet initialized (Temporal Dead Zone)
     }
 }
 window.addEventListener('resize', resizeCanvas);
