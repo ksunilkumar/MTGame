@@ -323,12 +323,14 @@ if (typeof ytgame !== 'undefined') {
     // Notify YouTube that game splash screen is visible
     ytgame.game.firstFrameReady();
 
-    // Notify YouTube that game is fully loaded and ready
-    if (trexImg.complete && cactusImg.complete) {
-        ytgame.game.gameReady();
-    } else {
-        window.addEventListener('load', () => ytgame.game.gameReady());
-    }
+    // Notify YouTube that game is fully loaded and ready (delayed to prevent batching)
+    setTimeout(() => {
+        if (trexImg.complete && cactusImg.complete) {
+            ytgame.game.gameReady();
+        } else {
+            window.addEventListener('load', () => ytgame.game.gameReady());
+        }
+    }, 100);
 
     // Register Audio hooks
     ytgame.system.onAudioEnabledChange((isAudioEnabled) => {
