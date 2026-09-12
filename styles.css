@@ -152,6 +152,10 @@ main {
     background: linear-gradient(135deg, #fcd34d, #f59e0b);
 }
 
+.astrocat-thumb {
+    background: linear-gradient(135deg, #38bdf8, #8b5cf6);
+}
+
 .empty-thumb {
     background: #334155;
 }
