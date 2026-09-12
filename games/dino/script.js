@@ -257,6 +257,11 @@ function endGame() {
         localStorage.setItem('dinoHighScore', highScore);
         highScoreElement.innerText = highScore;
     }
+
+    // YouTube Playables: Send Score
+    if (typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV) {
+        ytgame.engagement.sendScore({ value: currentScore });
+    }
 }
 
 function animate() {
@@ -309,22 +314,38 @@ window.addEventListener('mousedown', (e) => {
     }
 });
 
-// YouTube Playables Requirements
-// 1. Pause on Background (Visibility API)
-document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-        if (isPlaying && !isGameOver) {
-            isPaused = true;
-        }
-    } else {
-        if (isPaused) {
-            isPaused = false;
-            requestAnimationFrame(animate);
-        }
-    }
-});
-
 // 2. Prevent Native Browser Behavior (Scrolling/Zooming)
 window.addEventListener('touchmove', (e) => {
     e.preventDefault();
 }, { passive: false });
+
+// 3. YouTube Playables SDK Init
+if (typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV) {
+    // Notify YouTube that game splash screen is visible
+    ytgame.game.firstFrameReady();
+
+    // Notify YouTube that game is fully loaded and ready
+    if (trexImg.complete && cactusImg.complete) {
+        ytgame.game.gameReady();
+    } else {
+        window.addEventListener('load', () => ytgame.game.gameReady());
+    }
+
+    // Register Audio hooks
+    ytgame.system.onAudioEnabledChange((isAudioEnabled) => {
+        // We do not have audio yet, but if we did, we would mute/unmute here
+    });
+
+    // Register Pause hooks
+    ytgame.system.onPause(() => {
+        if (isPlaying && !isGameOver) {
+            isPaused = true;
+        }
+    });
+    ytgame.system.onResume(() => {
+        if (isPaused) {
+            isPaused = false;
+            requestAnimationFrame(animate);
+        }
+    });
+}
