@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chrome Dino Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <div class="score-board">
+            Score: <span id="score">0</span> | High Score: <span id="high-score">0</span>
+        </div>
+        <canvas id="gameCanvas" width="800" height="300"></canvas>
+        <div id="game-over" class="hidden">
+            <h2>GAME OVER</h2>
+            <p>Tap or Press Space to Restart</p>
+        </div>
+        <div class="controls-hint">
+            PC: Spacebar / Up Arrow | Mobile: Tap Screen
+        </div>
+        <a href="../../index.html" class="back-button">&larr; Back to Hub</a>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

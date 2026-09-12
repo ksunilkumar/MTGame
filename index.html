@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTGame | Playables Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1><span class="highlight">MT</span>Game</h1>
+            <p>A collection of bite-sized HTML5 playables.</p>
+        </header>
+
+        <main>
+            <div class="games-grid">
+                <!-- Dino Game Card -->
+                <a href="games/dino/index.html" class="game-card">
+                    <div class="game-thumbnail dino-thumb">
+                        <div class="thumb-icon">🦖</div>
+                        <div class="overlay-play">
+                            <svg viewBox="0 0 24 24" width="48" height="48" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h2>Chrome Dino</h2>
+                        <p>The classic infinite runner. Jump over cacti and survive!</p>
+                        <span class="badge">Playable</span>
+                    </div>
+                </a>
+
+                <!-- Placeholder for Game 2 -->
+                <div class="game-card disabled">
+                    <div class="game-thumbnail empty-thumb">
+                        <div class="thumb-icon">🎮</div>
+                    </div>
+                    <div class="game-info">
+                        <h2>Coming Soon</h2>
+                        <p>More exciting playables are in development.</p>
+                        <span class="badge badge-outline">In Dev</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2026 MTGame Studio. Optimized for YouTube Playables.</p>
+        </footer>
+    </div>
+</body>
+</html>
