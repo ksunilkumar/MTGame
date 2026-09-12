@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://www.youtube.com/game_api/v1"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Astro-Cat's Umbrella</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="score-board">
+        <div>Score: <span id="score">0</span></div>
+        <div id="power-up-indicator" class="hidden">POWER-UP ACTIVE!</div>
+        <div>High Score: <span id="high-score">0</span></div>
+    </div>
+    
+    <canvas id="gameCanvas"></canvas>
+    
+    <div id="game-over" class="hidden">
+        <h2>GAME OVER</h2>
+        <p>Tap anywhere to Restart</p>
+    </div>
+
+    <div id="start-screen">
+        <h1>Astro-Cat</h1>
+        <p>Tap Left/Right side of screen to move shield!</p>
+        <p>PC: Use Left/Right Arrow keys</p>
+        <p>Catch the Golden Fish for a power-up!</p>
+        <p class="blink">Tap to Start</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

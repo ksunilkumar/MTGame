@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Press+Start+2P&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    /* Deep space radial gradient */
+    background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    touch-action: none; /* Prevent browser scrolling/pull-to-refresh */
+    color: #f8fafc;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.score-board {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: calc(20px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 20px calc(20px + env(safe-area-inset-left));
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    pointer-events: none;
+}
+
+#power-up-indicator {
+    color: #facc15;
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    from { opacity: 0.7; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1.05); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+#game-over, #start-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(15, 23, 42, 0.85);
+    padding: 30px 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px);
+    z-index: 20;
+    pointer-events: none;
+    width: 90%;
+    max-width: 400px;
+}
+
+h1, h2 {
+    font-family: 'Press Start 2P', cursive;
+    color: #38bdf8;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    line-height: 1.4;
+}
+
+#game-over h2 {
+    color: #ef4444;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #cbd5e1;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.blink {
+    animation: blinking 1.5s infinite;
+    color: #38bdf8;
+    font-weight: 700;
+    margin-top: 20px;
+}
+
+@keyframes blinking {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
