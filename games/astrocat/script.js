@@ -14,6 +14,10 @@ let highScore = 0;
 let frameCount = 0;
 let gameOverTime = 0;
 
+// Load Cat Image
+const catImg = new Image();
+catImg.src = 'cat.jpg';
+
 // Safe localStorage wrapper
 function safeGetStorage(key, fallback) {
     try { return localStorage.getItem(key) || fallback; } catch(e) { return fallback; }
@@ -79,14 +83,16 @@ const sfx = {
 };
 
 // --- Game Objects ---
-const player = { radius: 20 };
+const player = {
+    radius: 40
+};
 
-let shield = {
+const shield = {
+    radius: 70,
+    width: Math.PI / 3, // 60 degrees
     angle: 0,
+    direction: 1, // 1 for clockwise, -1 for counter-clockwise
     speed: 0.05,
-    width: Math.PI / 3, // 60 degrees (PI/3 radians)
-    radius: 50,
-    direction: 1, // 1 = clockwise, -1 = counter-clockwise
     isGold: false
 };
 
@@ -260,6 +266,36 @@ function gameOver() {
     }
 }
 
+// --- Procedural Astro-Cat Drawing ---
+function drawAstroCat(ctx, x, y, radius, angle) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle + Math.PI / 2); // Rotate so top of cat's head faces the shield
+    
+    // Create a perfect circular clipping mask
+    ctx.beginPath();
+    ctx.arc(0, 0, radius, 0, Math.PI * 2);
+    ctx.clip();
+    
+    if (catImg.complete) {
+        // Draw the real cat image
+        ctx.drawImage(catImg, -radius, -radius, radius * 2, radius * 2);
+    } else {
+        // Fallback white circle while loading
+        ctx.fillStyle = '#f8fafc';
+        ctx.fill();
+    }
+    
+    ctx.restore();
+    
+    // Draw a subtle glow/rim around the helmet (outside the clip)
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.stroke();
+}
+
 // --- Main Loop ---
 function gameLoop() {
     if (!isPlaying) return;
@@ -374,37 +410,88 @@ function gameLoop() {
     ctx.stroke();
     ctx.shadowBlur = 0;
     
-    // Draw Player Core
-    ctx.beginPath();
-    ctx.arc(cx, cy, player.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#f8fafc';
-    ctx.fill();
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = '#f8fafc';
-    ctx.fill();
-    ctx.shadowBlur = 0;
+    // Draw Procedural Cat Core
+    drawAstroCat(ctx, cx, cy, player.radius, shield.angle);
     
     requestAnimationFrame(gameLoop);
 }
 
-// Initial draw (for background before start)
-function initialDraw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Draw player and shield
-    ctx.beginPath();
-    ctx.arc(cx, cy, player.radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#f8fafc';
-    ctx.fill();
+// Animated Start Screen Instructions
+let instPhase = 0;
+function instructionLoop() {
+    if (isPlaying) return;
     
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw background stars
+    ctx.fillStyle = '#cbd5e1';
+    stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    // Draw Procedural Cat Core
+    drawAstroCat(ctx, cx, cy, player.radius, shield.angle);
+    
+    // Draw Shield
     ctx.beginPath();
     ctx.arc(cx, cy, shield.radius, -shield.width/2, shield.width/2);
     ctx.lineWidth = 8;
     ctx.lineCap = 'round';
     ctx.strokeStyle = '#38bdf8';
     ctx.stroke();
+
+    // Draw pulsing animated arrows
+    instPhase += 0.05;
+    const pulse = Math.sin(instPhase) * 5;
+    const alpha = 0.5 + Math.sin(instPhase) * 0.5;
+    
+    ctx.save();
+    ctx.translate(cx, cy);
+    
+    // Setup arrow style
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = `rgba(239, 68, 68, ${alpha})`; // Red
+    ctx.fillStyle = `rgba(239, 68, 68, ${alpha})`;
+    ctx.font = '700 16px Outfit';
+    ctx.textAlign = 'center';
+    
+    // Right Arrow
+    ctx.beginPath();
+    ctx.arc(0, 0, shield.radius + 40 + pulse, 0.2, 0.8);
+    ctx.stroke();
+    // Arrowhead
+    ctx.beginPath();
+    const rx = Math.cos(0.8) * (shield.radius + 40 + pulse);
+    const ry = Math.sin(0.8) * (shield.radius + 40 + pulse);
+    ctx.moveTo(rx, ry);
+    ctx.lineTo(rx - 8, ry - 8);
+    ctx.lineTo(rx - 2, ry - 12);
+    ctx.fill();
+    ctx.fillText("RIGHT", Math.cos(0.5) * (shield.radius + 70 + pulse), Math.sin(0.5) * (shield.radius + 70 + pulse) + 5);
+
+    // Left Arrow
+    ctx.beginPath();
+    ctx.arc(0, 0, shield.radius + 40 + pulse, -0.8, -0.2);
+    ctx.stroke();
+    // Arrowhead
+    ctx.beginPath();
+    const lx = Math.cos(-0.8) * (shield.radius + 40 + pulse);
+    const ly = Math.sin(-0.8) * (shield.radius + 40 + pulse);
+    ctx.moveTo(lx, ly);
+    ctx.lineTo(lx - 2, ly + 12);
+    ctx.lineTo(lx - 8, ly + 8);
+    ctx.fill();
+    ctx.fillText("LEFT", Math.cos(-0.5) * (shield.radius + 70 + pulse), Math.sin(-0.5) * (shield.radius + 70 + pulse) + 5);
+    
+    ctx.restore();
+    
+    requestAnimationFrame(instructionLoop);
 }
-// wait a tiny bit for canvas resize
-setTimeout(initialDraw, 50);
+
+// Start instruction animation loop
+setTimeout(instructionLoop, 50);
 
 // --- YouTube Playables SDK Integration ---
 if (typeof ytgame !== 'undefined') {
