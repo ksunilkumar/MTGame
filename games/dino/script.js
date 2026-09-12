@@ -319,12 +319,9 @@ window.addEventListener('touchmove', (e) => {
     e.preventDefault();
 }, { passive: false });
 
-// 3. YouTube Playables SDK Init
 if (typeof ytgame !== 'undefined') {
-    // Notify YouTube that game splash screen is visible (wait for next frame)
-    requestAnimationFrame(() => {
-        ytgame.game.firstFrameReady();
-    });
+    // Notify YouTube that game splash screen is visible
+    ytgame.game.firstFrameReady();
 
     // Notify YouTube that game is fully loaded and ready
     if (trexImg.complete && cactusImg.complete) {
