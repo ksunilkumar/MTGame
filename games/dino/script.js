@@ -259,7 +259,7 @@ function endGame() {
     }
 
     // YouTube Playables: Send Score
-    if (typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV) {
+    if (typeof ytgame !== 'undefined') {
         ytgame.engagement.sendScore({ value: currentScore });
     }
 }
@@ -320,9 +320,11 @@ window.addEventListener('touchmove', (e) => {
 }, { passive: false });
 
 // 3. YouTube Playables SDK Init
-if (typeof ytgame !== 'undefined' && ytgame.IN_PLAYABLES_ENV) {
-    // Notify YouTube that game splash screen is visible
-    ytgame.game.firstFrameReady();
+if (typeof ytgame !== 'undefined') {
+    // Notify YouTube that game splash screen is visible (wait for next frame)
+    requestAnimationFrame(() => {
+        ytgame.game.firstFrameReady();
+    });
 
     // Notify YouTube that game is fully loaded and ready
     if (trexImg.complete && cactusImg.complete) {
