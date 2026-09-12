@@ -7,7 +7,15 @@ const gameOverScreen = document.getElementById('game-over');
 // Game constants and state
 let frames = 0;
 let currentScore = 0;
-let highScore = localStorage.getItem('dinoHighScore') || 0;
+// Safe localStorage wrapper - YouTube Playables sandboxed iframe disables localStorage
+function safeGetStorage(key, fallback) {
+    try { return localStorage.getItem(key) || fallback; } catch(e) { return fallback; }
+}
+function safeSetStorage(key, value) {
+    try { localStorage.setItem(key, value); } catch(e) {}
+}
+
+let highScore = safeGetStorage('dinoHighScore', 0);
 let gameSpeed = 5;
 let isGameOver = false;
 let isPlaying = false;
@@ -254,7 +262,7 @@ function endGame() {
     
     if (currentScore > highScore) {
         highScore = currentScore;
-        localStorage.setItem('dinoHighScore', highScore);
+        safeSetStorage('dinoHighScore', highScore);
         highScoreElement.innerText = highScore;
     }
 
